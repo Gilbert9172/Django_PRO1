@@ -30,10 +30,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third Apps
+    'bootstrap4',
     'debug_toolbar',
 
     # Local Apps
-
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -80,6 +81,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "accounts.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -119,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'gstore' ,'templates')
+    os.path.join(BASE_DIR, 'gstore' ,'static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -134,3 +136,5 @@ INTERNAL_IPS = ['127.0.0.1']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
