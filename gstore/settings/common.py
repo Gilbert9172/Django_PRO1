@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     # Local Apps
-    'accounts'
+    'accounts',
+    'buy',
 ]
 
 MIDDLEWARE = [

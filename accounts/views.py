@@ -53,7 +53,7 @@ def profile_edit(request):
         if form.is_valid():
             form.save()
             messages.success(request,"프로필을 수정했습니다.")
-            return redirect("profile_edit")
+            return redirect("root")
     else:
         form = ProfileForm(instance=request.user)
 

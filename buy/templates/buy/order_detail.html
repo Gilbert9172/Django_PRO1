@@ -1,0 +1,20 @@
+{% extends 'buy/layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                {% for i in user.order_set.all %}
+                    <br>
+                    - 상품명 : {{i.products}}<br>
+                    - 상품 가격 : {{i.products.price}}<br>
+                    - 상품 갯수 : {{i.product_count}}<br>
+                    - 주문 시간 : {{i.order_time}}<br>
+                    - 주소 : {{i.address}}<br>
+                    <br>
+                    <a href="{% url 'buy:order_discard' %}">❌주문 취소 하기❌</a> << 취소 후 다시 주문해주세요!
+                {% endfor %}
+            </div>    
+        </div>
+    </div>
+{% endblock %}
