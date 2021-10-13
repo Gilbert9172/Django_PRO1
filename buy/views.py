@@ -74,7 +74,7 @@ def order_discard(request):
 def recommend(request):
 
     # 날씨 가져오기
-    url = 'http://api.openweathermap.org/data/2.5/weather?id=524901&lang=kr&appid=7d99cbf41595e294aeb700bfbe487ff7'
+    url = 'http://api.openweathermap.org/data/2.5/weather?id=524901&lang=kr&appid='
 
     if request.method == "POST":
         form = CityForm(request.POST)        
@@ -100,11 +100,14 @@ def recommend(request):
         weather_data.append(city_weather)
 
 
-        if '흐림' in city_weather['description']:
+        if '흐림' or '안개' in city_weather['description']:
             comment = "오늘은 구름이 많이 꼈네요! 집에서 한잔 해야 할것 같아요~"
             comments.append(comment)
         elif '맑음' in city_weather['description']:
             comment = "오늘은 화창하군요~! 친구들과 공원에서 한잔 어때요~?!"
+            comments.append(comment)
+        elif '비' in city_weather['description']:
+            comment = "오늘은 비가오네요ㅠㅠ! 오늘은 전에 막걸리 고고~!"
             comments.append(comment)
         else:
             pass
