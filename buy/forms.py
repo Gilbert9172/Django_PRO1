@@ -1,5 +1,6 @@
 from django import forms
-from .models import Order
+from django.forms import widgets
+from .models import City, Order
 
 class OrderForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
@@ -10,3 +11,11 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['products','product_count','address']
+
+class CityForm(forms.ModelForm):
+    class Meta:
+        model = City
+        fields = ['name']
+        widgets = {
+            forms.TextInput(attrs={'class':'input', 'placeholder':'City Name'})
+        }

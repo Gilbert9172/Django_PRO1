@@ -8,7 +8,8 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6 offset-sm-3">
-                {% for i in user.order_set.all %}
+                {% for i in order_list %}
+                    <br>
                     <br>
                     - 상품명 : {{i.products}}<br>
                     - 상품 가격 : {{i.products.price}}<br>
@@ -17,6 +18,7 @@
                     - 주소 : {{i.address}}<br>
                     <br>
                     <a href="{% url 'buy:order_discard' %}">❌주문 취소 하기❌</a> << 취소 후 다시 주문해주세요!
+                    <br>
                 {% endfor %}
             </div>    
         </div>

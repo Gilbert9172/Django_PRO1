@@ -3,7 +3,7 @@ from django.db.models.deletion import CASCADE
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# Create your models here.
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Product 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 class Product(models.Model):
     name = models.CharField(max_length=10)
     price = models.IntegerField()
@@ -14,6 +14,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Order 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     products = models.ForeignKey(Product,on_delete=CASCADE, related_name='order_product')
@@ -22,4 +25,16 @@ class Order(models.Model):
     address =  models.CharField(max_length=150)
 
     class Meta:
+        ordering = ['-id']
+
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Weather 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+class City(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = 'cities'
         ordering = ['-id']
