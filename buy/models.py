@@ -28,13 +28,22 @@ class Order(models.Model):
         ordering = ['-id']
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Weather 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
-class City(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=25, validators = [RegexValidator(r"^[a-zA-Z]+$")])
+# class City(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=25, validators = [RegexValidator(r"^[a-zA-Z]+$")])
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
-    class Meta:
-        verbose_name_plural = 'cities'
-        ordering = ['-id']
+#     class Meta:
+#         verbose_name_plural = 'cities'
+#         ordering = ['-id']
+
+
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Movie 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+
+class Movie(models.Model):
+    title =models.CharField(max_length=200)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.title

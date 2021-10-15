@@ -1,0 +1,25 @@
+{% extends "buy/layout.html" %}
+
+{% block content %}
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4 fw-normal">Movie</h1>
+        <p class="fs-5 text-muted">혼술과 함께할 영화는~?</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                {% include "_form.html" with form_title="영화 검색" submit_label="검색하기" %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <br>
+                {{ title }}
+                <br>
+                {{ genre }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

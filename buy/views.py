@@ -1,13 +1,14 @@
 from django.shortcuts import render,redirect
-from .forms import OrderForm, CityForm
+from .forms import OrderForm, MovieForm
 from django.utils import timezone
 from django.contrib import messages
-from .models import City, Order, Product
+from .models import Order, Product, Movie
 from django.contrib.auth.decorators import login_required
 import random, requests
+from .modeling import recommend, matrix
+import pandas as pd
 # from django.shortcuts import get_object_or_404
 # from django.contrib.auth import get_user_model
-
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 주문 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 
@@ -70,63 +71,102 @@ def order_discard(request):
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 추천 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 
+# @login_required
+# def recommend(request):
+#     if request.method == "POST":
+#         cities = City.objects.all().filter(user=request.user)
+#         if len(cities) >= 1:
+#             cities.delete()
+#         else:
+#             pass
+#         form = CityForm(request.POST)
+#         if form.is_valid:       
+#             k = form.save(commit=False)
+#             k.user = request.user
+#             k.save()
+#             return redirect("buy:recommend")
+
+#     form = CityForm()
+
+#     cities = City.objects.all().filter(user=request.user)
+
+#     weather_data,comments = [],[]
+#     for city in cities:
+#         url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid=170042f861af86da70b4e4b96749b810&lang=kr'
+#         r = requests.get(url).json()
+#         print(r)
+#         city_weather = {
+#             'city' : city.name,
+#             'temperature' : round(r['main']['temp']- 273.15,1),
+#             'description' : r['weather'][0]['description'],
+#             'icon' : r['weather'][0]['icon']
+#         }
+#         weather_data.append(city_weather)
+
+
+#         if '흐림' in city_weather['description']:
+#             comment = "오늘은 구름이 많이 꼈네요! 집에서 한잔 해야 할것 같아요~"
+#             comments.append(comment)
+#         elif '맑음' in city_weather['description']:
+#             comment = "오늘은 화창하군요~! 친구들과 공원에서 한잔 어때요~?!"
+#             comments.append(comment)
+#         elif '비' in city_weather['description']:
+#             comment = "오늘은 비가오네요ㅠㅠ! 오늘은 전에 막걸리 고고~!"
+#             comments.append(comment)
+#         elif '구름' in city_weather['description']:
+#             comment = "오늘은 구름이 많이 꼈네요! 집에서 한잔 해야 할것 같아요~"
+#             comments.append(comment)
+#         else:
+#             pass
+
+#     # 상품 추천
+#     product_list = Product.objects.all()
+#     pick = random.choice(product_list)
+#     context = {
+#                 'product_list':product_list,
+#                 'pick':pick,
+#                 'weather_data' : weather_data,
+#                 'form':form,
+#                 'comments' : comments,
+#                 }
+#     return render(request, 'buy/recommend.html',context)
+
+
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 추천2 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+
+
 @login_required
-def recommend(request):
+def recommends(request):
     if request.method == "POST":
-        cities = City.objects.all().filter(user=request.user)
-        if len(cities) >= 1:
-            cities.delete()
-        else:
-            pass
-        form = CityForm(request.POST)
-        if form.is_valid:       
-            k = form.save(commit=False)
-            k.user = request.user
-            k.save()
-            return redirect("buy:recommend")
+        # Movies = Movie.objects.all().filter(user=request.user)
+        # if len(Movies) >= 1:
+        #     Movies.delete()
+        # else:
+        #   pass
+        form = MovieForm(request.POST)
+        if form.is_valid:
+            m = form.save(commit=False)
+            m.user = request.user
+            m.save()
+            return redirect('buy:recommends')
 
-    form = CityForm()
+    form = MovieForm()
 
+    movies = Movie.objects.last() 
+    if movies:
+    
+        pred = recommend(movies.title,matrix,5,similar_genre=True)
+        final = pd.DataFrame(pred, columns = ['Title', 'Correlation', 'Genre'])
 
-    cities = City.objects.all().filter(user=request.user)
-
-    weather_data,comments = [],[]
-    for city in cities:
-        url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid=170042f861af86da70b4e4b96749b810&lang=kr'
-        r = requests.get(url).json()
-        print(r)
-        city_weather = {
-            'city' : city.name,
-            'temperature' : round(r['main']['temp']- 273.15,1),
-            'description' : r['weather'][0]['description'],
-            'icon' : r['weather'][0]['icon']
-        }
-        weather_data.append(city_weather)
+        title = final.Title
+        genre = final.Genre
+    else:
+        title = "제목을 입력해주세요"
+        genre = " "
 
 
-        if '흐림' in city_weather['description']:
-            comment = "오늘은 구름이 많이 꼈네요! 집에서 한잔 해야 할것 같아요~"
-            comments.append(comment)
-        elif '맑음' in city_weather['description']:
-            comment = "오늘은 화창하군요~! 친구들과 공원에서 한잔 어때요~?!"
-            comments.append(comment)
-        elif '비' in city_weather['description']:
-            comment = "오늘은 비가오네요ㅠㅠ! 오늘은 전에 막걸리 고고~!"
-            comments.append(comment)
-        elif '구름' in city_weather['description']:
-            comment = "오늘은 구름이 많이 꼈네요! 집에서 한잔 해야 할것 같아요~"
-            comments.append(comment)
-        else:
-            pass
-
-    # 상품 추천
-    product_list = Product.objects.all()
-    pick = random.choice(product_list)
-    context = {
-                'product_list':product_list,
-                'pick':pick,
-                'weather_data' : weather_data,
-                'form':form,
-                'comments' : comments,
-                }
-    return render(request, 'buy/recommend.html',context)
+    return render(request, 'buy/movie_index.html',{
+        'form':form,
+        'title':title,
+        'genre':genre
+    })
