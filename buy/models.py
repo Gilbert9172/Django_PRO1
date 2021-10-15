@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.conf import settings
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator,RegexValidator
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Product 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 class Product(models.Model):
@@ -30,7 +30,7 @@ class Order(models.Model):
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Weather 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 class City(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, validators = [RegexValidator(r"^[a-zA-Z]$")])
 
     def __str__(self):
         return self.name

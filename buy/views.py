@@ -72,48 +72,27 @@ def order_discard(request):
 
 @login_required
 def recommend(request):
-
-    # 날씨 가져오기
-    url = 'http://api.openweathermap.org/data/2.5/weather?id=524901&lang=kr&appid=7d99cbf41595e294aeb700bfbe487ff7'
-
     if request.method == "POST":
+        cities = City.objects.all().filter(user=request.user)
+        if len(cities) >= 1:
+            cities.delete()
+        else:
+            pass
         form = CityForm(request.POST)       
         k = form.save(commit=False)
         k.user = request.user
-        # qs = City.objects.all().filter(name__icontains=form)
-        # if qs :
-        #     if qs.exists:
         k.save()
 
     form = CityForm()
 
 
-    # user가 검색한 도시 목록
     cities = City.objects.all().filter(user=request.user)
-    # print(f'cities출력: {cities}')
-    
-    # 이전에 추가된 도시 이름
-    # last = cities.last()
-    # print(f'last출력: {last}')
 
-    # 이전에 추가된 도시 객체
-
-
-    # test = City.objects.all().filter(name__contains=last)
-    # print(f'test출력: {test}')
-
-    # test.delete()
-    
-    # 최근 검색한 도시
-    now = cities[:1]
-    # print(f'now출력: {now}')
-
-
-    weather_data = []
-    comments = []
-    for city in now:
-        r = requests.get(url.format(city)).json()
-
+    weather_data,comments = [],[]
+    for city in cities:
+        url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid=170042f861af86da70b4e4b96749b810&lang=kr'
+        r = requests.get(url).json()
+        print(r)
         city_weather = {
             'city' : city.name,
             'temperature' : round(r['main']['temp']- 273.15,1),
@@ -131,6 +110,9 @@ def recommend(request):
             comments.append(comment)
         elif '비' in city_weather['description']:
             comment = "오늘은 비가오네요ㅠㅠ! 오늘은 전에 막걸리 고고~!"
+            comments.append(comment)
+        elif '구름' in city_weather['description']:
+            comment = "오늘은 구름이 많이 꼈네요! 집에서 한잔 해야 할것 같아요~"
             comments.append(comment)
         else:
             pass
