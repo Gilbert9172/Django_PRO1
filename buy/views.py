@@ -78,10 +78,12 @@ def recommend(request):
             cities.delete()
         else:
             pass
-        form = CityForm(request.POST)       
-        k = form.save(commit=False)
-        k.user = request.user
-        k.save()
+        form = CityForm(request.POST)
+        if form.is_valid:       
+            k = form.save(commit=False)
+            k.user = request.user
+            k.save()
+            return redirect("buy:recommend")
 
     form = CityForm()
 

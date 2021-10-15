@@ -30,7 +30,7 @@ class Order(models.Model):
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Weather 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 class City(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=25, validators = [RegexValidator(r"^[a-zA-Z]$")])
+    name = models.CharField(max_length=25, validators = [RegexValidator(r"^[a-zA-Z]+$")])
 
     def __str__(self):
         return self.name
