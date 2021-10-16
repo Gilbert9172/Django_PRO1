@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import json
 
+# search_list
+# search_list = pd.read_csv('search_list.csv')
+
 meta = pd.read_csv('movies_metadata.csv')
 meta = meta[['id', 'original_title', 'original_language', 'genres']]
 meta = meta.rename(columns={'id':'movieId'})
@@ -43,10 +46,8 @@ def recommend(input_movie, matrix, n, similar_genre=True):
         if title == input_movie:
             continue
 
-        # rating comparison
         cor = pearsonR(matrix[input_movie], matrix[title])
         
-        # genre comparison
         if similar_genre and len(input_genres) > 0:
             temp_genres = meta[meta['original_title'] == title]['genres'].iloc(0)[0]
 
@@ -61,3 +62,10 @@ def recommend(input_movie, matrix, n, similar_genre=True):
     result.sort(key=lambda r: r[1], reverse=True)
 
     return result[:n]
+search_list = pd.read_csv('search_list.csv')
+search_list = search_list.set_index('Title')
+# test = pd.DataFrame(matrix.columns)
+# test.rename(columns={'original_title':'Title'}, inplace=True)
+# overviews = pd.read_csv('overviews.csv')
+# searh_list = pd.merge(test, overviews, how='inner', on='Title')
+# searh_list = searh_list.set_index('Title')

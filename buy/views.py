@@ -4,8 +4,8 @@ from django.utils import timezone
 from django.contrib import messages
 from .models import Order, Movie
 from django.contrib.auth.decorators import login_required
-import random, requests
-from .modeling import recommend, matrix
+# import random, requests
+from .modeling import recommend, matrix, search_list
 import pandas as pd
 # from django.shortcuts import get_object_or_404
 # from django.contrib.auth import get_user_model
@@ -151,23 +151,46 @@ def recommends(request):
             return redirect('buy:recommends')
 
     form = MovieForm()
-
     movies = Movie.objects.last() 
-    if movies:
-    
-        pred = recommend(movies.title,matrix,5,similar_genre=True)
-        final = pd.DataFrame(pred, columns = ['Title', 'Correlation', 'Genre'])
 
-        title = final.Title
-        genre = final.Genre
-    else:
+    try: 
+        pred = recommend(movies.title,matrix,3,similar_genre=True)
+        final = pd.DataFrame(pred, columns = ['Title', 'Correlation', 'Genre'])
+        
+        movies_title = movies.title
+        over = search_list.loc[movies.title].overview
+        title1 = final.iloc[0].Title
+        genre1 = final.iloc[0].Genre
+        title2 = final.iloc[1].Title
+        genre2 = final.iloc[1].Genre
+        title3 = final.iloc[2].Title
+        genre3 = final.iloc[2].Genre
+        title = " "
+        genre = " "
+
+        context = {
+            'form':form,
+            'title1':title1,
+            'genre1':genre1,
+            'title2':title2,
+            'genre2':genre2,
+            'title3':title3,
+            'genre3':genre3,
+            'final':final,
+            'movies_title':movies_title,
+            'over':over, 
+            'title':title,
+            'genre':genre,
+        }
+        return render(request, 'buy/movie_index.html',context)
+
+    except:
         title = "제목을 입력해주세요"
         genre = " "
 
-
-    return render(request, 'buy/movie_index.html',{
-        'form':form,
-        'title':title,
-        'genre':genre,
-        'final':final
-    })
+        context = {
+            'form':form,
+            'title':title,
+            'genre':genre,
+        }
+        return render(request, 'buy/movie_main.html',context)
