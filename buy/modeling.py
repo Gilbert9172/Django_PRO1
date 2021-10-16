@@ -1,7 +1,6 @@
 import numpy as np 
 import pandas as pd
 import json
-import pickle
 
 meta = pd.read_csv('movies_metadata.csv')
 meta = meta[['id', 'original_title', 'original_language', 'genres']]

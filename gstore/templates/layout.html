@@ -37,10 +37,10 @@
 
                         {% if user.is_authenticated %}
                         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-                            <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'buy:order' %}">구매📑</a>
-                            <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'buy:recommends' %}">오늘의 추천🤷‍♂️</a>
+                            <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'buy:order' %}">주문📑</a>
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'buy:order_detail' %}">주문 조회🛵</a>
                             <a class="me-3 py-2 text-dark text-decoration-none" href="#">게시판📌</a>
+                            <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'buy:recommends' %}">혼술과 영화🎬</a>
                             <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'accounts:profile_edit' %}">
                                     {{ user.username }}😀
                             </a>

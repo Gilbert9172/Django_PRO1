@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .forms import OrderForm, MovieForm
 from django.utils import timezone
 from django.contrib import messages
-from .models import Order, Product, Movie
+from .models import Order, Movie
 from django.contrib.auth.decorators import login_required
 import random, requests
 from .modeling import recommend, matrix
@@ -138,11 +138,11 @@ def order_discard(request):
 @login_required
 def recommends(request):
     if request.method == "POST":
-        # Movies = Movie.objects.all().filter(user=request.user)
-        # if len(Movies) >= 1:
-        #     Movies.delete()
-        # else:
-        #   pass
+        Movies = Movie.objects.all().filter(user=request.user)
+        if len(Movies) >= 1:
+            Movies.delete()
+        else:
+            pass
         form = MovieForm(request.POST)
         if form.is_valid:
             m = form.save(commit=False)
@@ -168,5 +168,6 @@ def recommends(request):
     return render(request, 'buy/movie_index.html',{
         'form':form,
         'title':title,
-        'genre':genre
+        'genre':genre,
+        'final':final
     })
