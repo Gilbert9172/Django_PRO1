@@ -4,9 +4,9 @@ from django.utils import timezone
 from django.contrib import messages
 from .models import Order, Movie
 from django.contrib.auth.decorators import login_required
-# import random, requests
 from .modeling import recommend, matrix, search_list
 import pandas as pd
+# import random, requests
 # from django.shortcuts import get_object_or_404
 # from django.contrib.auth import get_user_model
 
@@ -22,7 +22,7 @@ def order(request):
                 ordering.user = request.user
                 ordering.save()
                 messages.success(request,"주문을 성공하셨습니다")
-                return redirect('root')
+                return redirect('buy:recommends')
     else:
         form = OrderForm()
     
@@ -30,13 +30,6 @@ def order(request):
     return render(request,"buy/order_form.html",context)
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 주문 내역 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
-
-# @login_required
-# def order_detail(request):
-#     order_list = Order.objects.filter(user_id=request.user.id)
-#     context = {'order':order_list}
-#     return render(request,'buy/order_detail.html',context)
-
 @login_required
 def order_detail(request):
     # request.user의 주문 목록 모두 가져오기.
