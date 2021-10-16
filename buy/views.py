@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib import messages
 from .models import Order, Movie
 from django.contrib.auth.decorators import login_required
-from .modeling import recommend, matrix, search_list
+from .modeling import get_recommendations, overviews
 import pandas as pd
 # import random, requests
 # from django.shortcuts import get_object_or_404
@@ -146,50 +146,33 @@ def recommends(request):
     form = MovieForm()
     movies = Movie.objects.last() 
 
-    try: 
-        pred = recommend(movies.title,matrix,3,similar_genre=True)
-        final = pd.DataFrame(pred, columns = ['Title', 'Correlation', 'Genre'])
-        
-        movies_title = movies.title
-        over = search_list.loc[movies.title].overview
-        release_date = search_list.loc[movies.title].release_date
-        runtime = int(search_list.loc[movies.title].runtime)
-        vote_average = search_list.loc[movies.title].vote_average
-        title1 = final.iloc[0].Title
-        genre1 = final.iloc[0].Genre
-        title2 = final.iloc[1].Title
-        genre2 = final.iloc[1].Genre
-        title3 = final.iloc[2].Title
-        genre3 = final.iloc[2].Genre
-        title = " "
-        genre = " "
+    try:
+        pred = get_recommendations(movies.title)
+        final = pd.DataFrame(pred)
+
+        movies_title = movies.title 
+        recommend_mv = final.title
+        ove = overviews.loc[movies.title].overview
+        release_date = overviews.loc[movies.title].release_date
+        runtime = int(overviews.loc[movies.title].runtime)
+        vote_average = overviews.loc[movies.title].vote_average
+        genres	= overviews.loc[movies.title].genres	
 
         context = {
             'form':form,
-            'title1':title1,
-            'genre1':genre1,
-            'title2':title2,
-            'genre2':genre2,
-            'title3':title3,
-            'genre3':genre3,
-            'final':final,
             'movies_title':movies_title,
-            'over':over,
+            'recommend_mv':recommend_mv,
+            'ove':ove,
             'release_date':release_date,
             'runtime':runtime,
             'vote_average':vote_average,
-            'title':title,
-            'genre':genre,
+            'genres':genres
         }
-        return render(request, 'buy/movie_index.html',context)
+
+        return render(request, 'buy/movie_test.html',context)
 
     except:
-        title = "제목을 입력해주세요"
-        genre = " "
-
         context = {
             'form':form,
-            'title':title,
-            'genre':genre,
         }
         return render(request, 'buy/movie_main.html',context)
