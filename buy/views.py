@@ -152,6 +152,9 @@ def recommends(request):
         
         movies_title = movies.title
         over = search_list.loc[movies.title].overview
+        release_date = search_list.loc[movies.title].release_date
+        runtime = int(search_list.loc[movies.title].runtime)
+        vote_average = search_list.loc[movies.title].vote_average
         title1 = final.iloc[0].Title
         genre1 = final.iloc[0].Genre
         title2 = final.iloc[1].Title
@@ -171,7 +174,10 @@ def recommends(request):
             'genre3':genre3,
             'final':final,
             'movies_title':movies_title,
-            'over':over, 
+            'over':over,
+            'release_date':release_date,
+            'runtime':runtime,
+            'vote_average':vote_average,
             'title':title,
             'genre':genre,
         }

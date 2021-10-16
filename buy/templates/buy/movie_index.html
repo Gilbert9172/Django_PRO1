@@ -36,9 +36,13 @@
                                         <div class="col-sm-10">
                                             <h2><< 제목 >></h2>
                                             <br>
-                                            {% if movies_title %}
-                                                <h3>{{ movies_title }}</h3>
-                                            {% endif %}
+                                            <h3>{{ movies_title }}</h3>
+                                            <br>
+                                            개봉일: {{ release_date }}
+                                            <br>
+                                            상영시간: {{ runtime }}분
+                                            <br>
+                                            평점: {{ vote_average }}
                                         </div>    
                                     </div>
                                 </div>
