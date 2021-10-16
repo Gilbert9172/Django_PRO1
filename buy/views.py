@@ -6,10 +6,7 @@ from .models import Order, Movie
 from django.contrib.auth.decorators import login_required
 from .modeling import get_recommendations, overviews
 import pandas as pd
-# import random, requests
-# from django.shortcuts import get_object_or_404
-# from django.contrib.auth import get_user_model
-
+# import pickle
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 주문 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 
 @login_required
@@ -61,6 +58,64 @@ def order_discard(request):
     order.delete()
     messages.success(request,"주문을 취소했습니다.")
     return redirect("root")
+
+
+
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 추천2 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+
+@login_required
+def recommends(request):
+    if request.method == "POST":
+        Movies = Movie.objects.all().filter(user=request.user)
+        if len(Movies) >= 1:
+            Movies.delete()
+        else:
+            pass
+        form = MovieForm(request.POST)
+        if form.is_valid:
+            m = form.save(commit=False)
+            m.user = request.user
+            m.save()
+            return redirect('buy:recommends')
+
+    form = MovieForm()
+    movies = Movie.objects.last() 
+    # pickle사용
+    # with open('get_recommendations', 'rb') as f:
+    #     recommendation = pickle.load(f) 
+
+    try:
+        # pred = recommendation(movies.title) # pickle사용할 경우
+        pred = get_recommendations(movies.title)
+        final = pd.DataFrame(pred)
+
+        movies_title = movies.title 
+        recommend_mv = final.title
+        ove = overviews.loc[movies.title].overview
+        release_date = overviews.loc[movies.title].release_date
+        runtime = int(overviews.loc[movies.title].runtime)
+        vote_average = overviews.loc[movies.title].vote_average
+        genres	= overviews.loc[movies.title].genres	
+
+        context = {
+            'form':form,
+            'movies_title':movies_title,
+            'recommend_mv':recommend_mv,
+            'ove':ove,
+            'release_date':release_date,
+            'runtime':runtime,
+            'vote_average':vote_average,
+            'genres':genres
+        }
+
+        return render(request, 'buy/movie_test.html',context)
+
+    except:
+        context = {
+            'form':form,
+        }
+
+        return render(request, 'buy/movie_main.html',context)
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 추천 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 
@@ -123,56 +178,3 @@ def order_discard(request):
 #                 'comments' : comments,
 #                 }
 #     return render(request, 'buy/recommend.html',context)
-
-
-#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 추천2 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
-
-
-@login_required
-def recommends(request):
-    if request.method == "POST":
-        Movies = Movie.objects.all().filter(user=request.user)
-        if len(Movies) >= 1:
-            Movies.delete()
-        else:
-            pass
-        form = MovieForm(request.POST)
-        if form.is_valid:
-            m = form.save(commit=False)
-            m.user = request.user
-            m.save()
-            return redirect('buy:recommends')
-
-    form = MovieForm()
-    movies = Movie.objects.last() 
-
-    try:
-        pred = get_recommendations(movies.title)
-        final = pd.DataFrame(pred)
-
-        movies_title = movies.title 
-        recommend_mv = final.title
-        ove = overviews.loc[movies.title].overview
-        release_date = overviews.loc[movies.title].release_date
-        runtime = int(overviews.loc[movies.title].runtime)
-        vote_average = overviews.loc[movies.title].vote_average
-        genres	= overviews.loc[movies.title].genres	
-
-        context = {
-            'form':form,
-            'movies_title':movies_title,
-            'recommend_mv':recommend_mv,
-            'ove':ove,
-            'release_date':release_date,
-            'runtime':runtime,
-            'vote_average':vote_average,
-            'genres':genres
-        }
-
-        return render(request, 'buy/movie_test.html',context)
-
-    except:
-        context = {
-            'form':form,
-        }
-        return render(request, 'buy/movie_main.html',context)
