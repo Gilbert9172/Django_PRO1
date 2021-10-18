@@ -1,21 +1,33 @@
-import os
+import os,json
 from os.path import abspath, dirname
+from django.core.exceptions import ImproperlyConfigured
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+with open("secret.json") as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting):
+    # 비밀 변수를 가져오거나 명시적 예외를 반환한다.
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = f'Set the {setting} environment variable'
+        raise ImproperlyConfigured(error_msg)
+
+
 # BASE_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓 SECRET_KEY 보호 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+SECRET_KEY = get_secret('SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$wonw&)0&11#lm9d!v^w5o59^z-+mt8g!7(++h__9o-0liysh5'
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# 개발 모드
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# 배포모드
+# DEBUG = False
+
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -31,7 +43,7 @@ INSTALLED_APPS = [
 
     # Third Apps
     'bootstrap4',
-    'debug_toolbar',
+    # 'debug_toolbar',
 
     # Local Apps
     'accounts',
@@ -39,7 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,22 +87,22 @@ WSGI_APPLICATION = 'gstore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-DATABASES = { 
+DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': 'gstore',
-        'USER': 'gilbert917',
-        'PASSWORD' : '950904',
-        'HOST' : 'localhost',
-        'PORT' :'', } 
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+# DATABASES = { 
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql', 
+#         'NAME': 'gstore',
+#         'USER': 'gilbert917',
+#         'PASSWORD' : '950904',
+#         'HOST' : 'localhost',
+#         'PORT' :'5432', } 
+#         }
 
 
 
@@ -134,15 +146,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'gstore' ,'static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'gstore' ,'static')
+# ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-INTERNAL_IPS = ['127.0.0.1']
+# INTERNAL_IPS = ['127.0.0.1']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
