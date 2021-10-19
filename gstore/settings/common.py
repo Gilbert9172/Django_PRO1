@@ -2,6 +2,9 @@ import os,json
 from os.path import abspath, dirname
 from django.core.exceptions import ImproperlyConfigured
 
+
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
+
 with open("secret.json") as f:
     secrets = json.loads(f.read())
 
@@ -13,25 +16,16 @@ def get_secret(setting):
         error_msg = f'Set the {setting} environment variable'
         raise ImproperlyConfigured(error_msg)
 
-
-# BASE_DIR = Path(__file__).resolve().parent.parent.parent
-BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
-
-
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓 SECRET_KEY 보호 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 SECRET_KEY = get_secret('SECRET_KEY')
 
 # 개발 모드
 DEBUG = True
 
-# 배포모드
-# DEBUG = False
-
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     # Django Apps
     'django.contrib.admin',
@@ -83,10 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gstore.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -106,11 +96,8 @@ DATABASES = {
 
 
 
-
+# User모델 재정의
 AUTH_USER_MODEL = "accounts.User"
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -128,9 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -142,9 +126,8 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Static/Media 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'gstore' ,'static')
@@ -154,13 +137,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# INTERNAL_IPS = ['127.0.0.1']
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Login/Logout 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
