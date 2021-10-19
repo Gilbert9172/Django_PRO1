@@ -90,8 +90,6 @@
 
 # 📌 ***<span style="color:green">Django</span>로 만든 G-Store***
 
-- ***[G-Store 링크](https://gilbertstore.azurewebsites.net/accounts/login/?next=/)***
-
 <br>
 
 #### 1. CRUD
