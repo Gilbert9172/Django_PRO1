@@ -90,6 +90,8 @@
 
 # 📌 ***<span style="color:green">Django</span>로 만든 G-Store***
 
+- ***[G-Store 링크](https://gilbertstore.azurewebsites.net/accounts/login/?next=/)***
+
 <br>
 
 #### 1. CRUD
@@ -120,13 +122,19 @@
 
 #### 3. Docker
 
-> ***Web Application → <span style="color:#4682B4">Docker</span> Image***
+> ***Web Application → <span style="color:#4682B4">Docker</span> Image → <span style="color:#4682B4">Docker Hub</span>***
 
 <img src="https://user-images.githubusercontent.com/83274792/137897651-e216b2a9-806d-43a8-b941-3ea4af56cc83.png" width="90%" height="70%"/>
 
 <br>
 
 #### 4. Azure(PostgreSQL)
+
+> ***PaaS (Platform as a Service)***
+
+> ***개발자들이 인프라 걱정 없이 오로지 개발과 테스트에 집중할 수 있도록 돕는다.***
+
+> ***Heroku, Azure, OpenShift***
 
 > ***<span style="color:#4682B4">Docker</span> Container migration → Azure(PostgreSQL)***
 
