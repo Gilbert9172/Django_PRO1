@@ -5,18 +5,17 @@ from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓 SECRET_KEY 보호 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 with open("secret.json") as f:
     secrets = json.loads(f.read())
 
 def get_secret(setting):
-    # 비밀 변수를 가져오거나 명시적 예외를 반환한다.
     try:
         return secrets[setting]
     except KeyError:
         error_msg = f'Set the {setting} environment variable'
         raise ImproperlyConfigured(error_msg)
 
-#〓〓〓〓〓〓〓〓〓〓〓〓〓〓 SECRET_KEY 보호 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 SECRET_KEY = get_secret('SECRET_KEY')
 
 # 개발 모드
@@ -77,25 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'gstore.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-# DATABASES = { 
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql', 
-#         'NAME': 'gstore',
-#         'USER': 'gilbert917',
-#         'PASSWORD' : '950904',
-#         'HOST' : 'localhost',
-#         'PORT' :'5432', } 
-#         }
-
-
-
 # User모델 재정의
 AUTH_USER_MODEL = "accounts.User"
 
@@ -129,13 +109,11 @@ USE_TZ = True
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Static/Media 〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'gstore' ,'static')
-# ]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

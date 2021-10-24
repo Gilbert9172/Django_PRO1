@@ -45,10 +45,13 @@ login = LoginView.as_view(template_name ="accounts/login_form.html")
 #     return logout_then_login(request)
 logout = auth_views.LogoutView.as_view()
 
+
+
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 프로필 수정 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 @login_required
 def profile_edit(request):
     if request.method == "POST":    
+        # 기존에 저장되어 있는 프로필 가져오기.
         form = ProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
@@ -56,15 +59,21 @@ def profile_edit(request):
             return redirect("root")
     else:
         form = ProfileForm(instance=request.user)
-
-
     return render(request,'accounts/profile_edit_form.html',{'form':form})
+
 
 
 #〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 비밀번호 수정 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 
 class PasswordChangeView(LoginRequiredMixin, AuthPasswordChangeView):
     form_class = PasswordChangeForm
+
+    """
+    파이썬은 인터프리터 언어이기 때문에 한줄 한줄 실행한다.
+    근데 비밀번호 변경은 필요시에만 실행되어야 한다.
+    따라서 reverse_lazy를 사용하여, 해당변수에 직접 접근 혹은
+    메서드가 호출될 때 실행시켜야 한다.
+    """
     success_url = reverse_lazy('password_change')
     template_name = 'accounts/password_change_form.html'
 

@@ -117,7 +117,7 @@ def recommends(request):
 
         return render(request, 'buy/movie_main.html',context)
 
-#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 추천 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
+#〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓 Weather API 〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓#
 
 # @login_required
 # def recommend(request):

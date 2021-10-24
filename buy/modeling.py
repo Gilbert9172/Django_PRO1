@@ -5,10 +5,11 @@ from ast import literal_eval
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-
+# 데이터 불러오기
 df1=pd.read_csv('tmdb_5000_credits.csv')
 df2=pd.read_csv('tmdb_5000_movies.csv')
 
+# df1의 원하는 컬럼 선택 후 df2에 merge
 df1.columns = ['id','tittle','cast','crew']
 df2= df2.merge(df1,on='id')
 
@@ -16,12 +17,14 @@ features = ['cast', 'crew', 'keywords', 'genres']
 for feature in features:
     df2[feature] = df2[feature].apply(literal_eval)
 
+# Director추출 작업
 def get_director(x):
     for i in x:
         if i['job'] == 'Director':
             return i['name']
     return np.nan
 
+# 목록에서 상위 3개 요소 추출
 def get_list(x):
     if isinstance(x, list):
         names = [i['name'] for i in x]
@@ -52,15 +55,16 @@ features = ['cast', 'keywords', 'director', 'genres']
 for feature in features:
     df2[feature] = df2[feature].apply(clean_data)
 
+# keywords/cast/director/genres를 하나의 문자열로 합치기
 def create_soup(x):
     return ' '.join(x['keywords']) + ' ' + ' '.join(x['cast']) + ' ' + x['director'] + ' ' + ' '.join(x['genres'])
 df2['soup'] = df2.apply(create_soup, axis=1)
 
-
-
+# 영어 불용어 제거 / df2['soup']에 대한count_matrix 생성
 count = CountVectorizer(stop_words='english')
 count_matrix = count.fit_transform(df2['soup'])
 
+# count_matrix를 기반으로 코사인 유사도 행렬을 계산
 cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 
 df2 = df2.reset_index()

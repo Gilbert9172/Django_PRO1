@@ -2,7 +2,7 @@
 from django.urls import path
 from . import views
 
-#app_name = "accounts"
+app_name = "accounts"
 
 urlpatterns = [
     path('signup/', views.signup, name="signup"),
@@ -12,9 +12,7 @@ urlpatterns = [
     path('edit/', views.profile_edit, name="profile_edit"),
 ]
 
-
-
-
-# /accounts/login/ 은 settings.LOGIN_URL과 같은 값이다.
-# login_required라는 장식자를 적용하면 /accounts/login/ 주소로 이동하는데
-# 그 이유는 settings.LOGIN_URL의 설정 때문이다.
+"""
+login_required라는 장식자를 적용하면 /accounts/login/ 주소로 이동하는데
+그 이유는 django/conf/global_settings.py의 LOGIN_URL설정이 '/accounts/login/'이기 때문이다.
+"""
