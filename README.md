@@ -1,5 +1,9 @@
 # G-Store
 
+- [중간 회고1](https://gilbert9172.github.io/portfolio/2021/10/15/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%A0%90%EA%B2%801/)
+
+- [중간 회고2](https://gilbert9172.github.io/portfolio/2021/10/16/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%A0%90%EA%B2%802/)
+
 ---
 
 # 📃 ***목차*** 
